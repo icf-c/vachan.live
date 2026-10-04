@@ -1,8 +1,9 @@
 # CLAUDE.md - vachan.live
 
 One page: the product's name, one sentence, the demo video, an email field.
-Nothing on it may claim a feature that has not shipped, and the page never
-mentions the cloud service until that exists.
+Nothing on it may claim a shipped feature that has not shipped. The cloud
+API is named as what is coming (Yogesh's decision, 2026-10-04), not as a
+thing you can use today.
 
 Load the `voice` skill (professional) and `stop-slop` before touching any
 prose here, the page copy included. `just voice` runs the checker on the
