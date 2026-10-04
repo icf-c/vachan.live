@@ -62,7 +62,7 @@ secrets *args:
 # Create the R2 bucket the Terraform state lives in, once. Needs
 # CLOUDFLARE_API_TOKEN and CLOUDFLARE_ACCOUNT_ID in the environment
 state-bucket:
-    npx --yes wrangler r2 bucket create tfstate-vachan
+    npx --yes wrangler r2 bucket create tfstates
 
 # Terraform plan from this machine, with the values from infra/.env.local
 plan-local:

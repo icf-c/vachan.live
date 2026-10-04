@@ -38,7 +38,7 @@ GitHub secrets the workflow needs, and nothing else:
 | --- | --- |
 | `CLOUDFLARE_API_TOKEN` | Pages edit, Workers KV edit, Turnstile edit, DNS edit and Zone read on vachan.live |
 | `CLOUDFLARE_ACCOUNT_ID` | the account |
-| `R2_ACCESS_KEY_ID`, `R2_SECRET_ACCESS_KEY` | an R2 API token (Object Read & Write on the bucket `tfstate-vachan`), for the Terraform state |
+| `R2_ACCESS_KEY_ID`, `R2_SECRET_ACCESS_KEY` | an R2 API token (Object Read & Write on the bucket `tfstates`), for the Terraform state |
 
 Put them in `infra/.env.local` (gitignored, one `KEY=value` per line) and
 run `just secrets`; it refuses an empty value or a lone hyphen.
