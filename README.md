@@ -47,7 +47,7 @@ run `just secrets`; it refuses an empty value or a lone hyphen.
 
 The state bucket is created once, by hand or with `just state-bucket`
 (wrangler, needs the API token in the environment). The account is the one
-that holds vachan.live; nothing here touches the lonkar.org account.
+that holds vachan.live.
 
 The zone `vachan.live` must already be on the account; `infra/dns.tf` finds
 it by name. No zone id secret, no Turnstile secret, no SMTP: the only
