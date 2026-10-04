@@ -18,6 +18,7 @@ cd "$(dirname "$0")/.."
 : "${CLOUDFLARE_API_TOKEN:?CLOUDFLARE_API_TOKEN is not set}"
 : "${CLOUDFLARE_ACCOUNT_ID:?CLOUDFLARE_ACCOUNT_ID is not set}"
 bucket="media-vachan-live"
+zone_id() { curl -s "https://api.cloudflare.com/client/v4/zones?name=vachan.live" -H "Authorization: Bearer $CLOUDFLARE_API_TOKEN" | python3 -c 'import json,sys; print(json.load(sys.stdin)["result"][0]["id"])'; }
 files=("$@")
 [[ ${#files[@]} -gt 0 ]] || files=(media/*)
 for f in "${files[@]}"; do
@@ -30,5 +31,8 @@ for f in "${files[@]}"; do
   # copies alive at the edge longer than a fresh key does.
   npx --yes wrangler r2 object delete "$bucket/$name" --remote >/dev/null 2>&1 || true
   npx --yes wrangler r2 object put "$bucket/$name" --file "$f" --content-type "$type" --remote >/dev/null
+  # The edge keeps the old object until told; the token has Cache Purge.
+  curl -s -X POST "https://api.cloudflare.com/client/v4/zones/$(zone_id)/purge_cache" -H "Authorization: Bearer $CLOUDFLARE_API_TOKEN" -H "Content-Type: application/json" \
+    --data "{\"files\":[\"https://media.vachan.live/$name\"]}" | grep -q '"success":true' || echo "  (purge of $name failed; the page's ?v= query string covers the next deploy)"
   printf '  %-14s %7s  https://media.vachan.live/%s\n' "$name" "$(du -h "$f" | cut -f1)" "$name"
 done

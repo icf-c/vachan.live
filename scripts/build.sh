@@ -20,9 +20,14 @@ if [[ -n "$key" && ! "$key" =~ ^[0-9]x[0-9A-Za-z_-]{20,}$ ]]; then
 fi
 [[ -n "$key" ]] || { key="1x00000000000000000000AA"; echo "build: no TURNSTILE_SITE_KEY, using Cloudflare's test key"; }
 
+# Media URLs carry the commit as a query string, so a deploy after a re-cut
+# fetches the new object instead of the edge's copy of the old one (the
+# cache served the previous demo.mp4 for an hour after the upload once).
+rev=$(git rev-parse --short HEAD 2>/dev/null || date +%s)
+
 rm -rf dist
 cp -R public dist
 # sed -i differs between BSD and GNU; a temp file is portable.
-sed "s|__TURNSTILE_SITE_KEY__|$key|g" public/index.html > dist/index.html
+sed -e "s|__TURNSTILE_SITE_KEY__|$key|g" -e "s|__MEDIA_V__|$rev|g" public/index.html > dist/index.html
 grep -q "__TURNSTILE_SITE_KEY__" dist/index.html && { echo "placeholder survived the build" >&2; exit 1; }
 echo "build: dist/ ($(du -sh dist | cut -f1)), site key ${key:0:4}…"
