@@ -1,0 +1,4 @@
+Contact: mailto:vachan@icf-c.com
+Expires: 2027-10-04T00:00:00.000Z
+Preferred-Languages: en
+Canonical: https://vachan.live/.well-known/security.txt
