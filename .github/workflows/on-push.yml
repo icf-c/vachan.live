@@ -1,0 +1,100 @@
+name: Deploy vachan.live
+
+on:
+  push:
+    branches:
+      - '**'
+
+env:
+  TF_VERSION: ~1
+  AWS_REGION: us-east-1
+
+jobs:
+  # Infrastructure first: the Turnstile site key the page needs comes out of
+  # Terraform. Branches plan and read the key from existing state; main
+  # applies. The very first run on main creates the widget, so the key exists
+  # by the time the build job wants it.
+  infra:
+    name: ${{ github.ref != 'refs/heads/main' && 'plan' || 'plan-apply' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+    env:
+      TF_VAR_cloudflare_api_token: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      TF_VAR_cloudflare_account_id: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+    outputs:
+      turnstile_site_key: ${{ steps.out.outputs.turnstile_site_key }}
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: AWS credentials
+        uses: aws-actions/configure-aws-credentials@v6
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - uses: hashicorp/setup-terraform@v4
+        with:
+          terraform_version: ${{ env.TF_VERSION }}
+          terraform_wrapper: false
+
+      - name: Terraform fmt
+        working-directory: infra
+        run: terraform fmt -check .
+
+      - name: Terraform init
+        working-directory: infra
+        # readonly: a missing or stale lock file fails here instead of being
+        # rewritten with a newer provider.
+        run: terraform init -input=false -lockfile=readonly -backend-config=backend.config
+
+      - name: Terraform validate
+        working-directory: infra
+        run: terraform validate
+
+      - name: Terraform plan
+        working-directory: infra
+        run: terraform plan -input=false -out=plan.tfout
+
+      - name: Terraform apply
+        if: github.ref == 'refs/heads/main'
+        working-directory: infra
+        run: terraform apply -input=false -auto-approve plan.tfout
+
+      - name: Outputs
+        id: out
+        working-directory: infra
+        # Empty on a branch before the first apply; the build then uses
+        # Cloudflare's test key and the preview form cannot submit.
+        run: echo "turnstile_site_key=$(terraform output -raw turnstile_site_key 2>/dev/null || true)" >> "$GITHUB_OUTPUT"
+
+  deploy:
+    needs: infra
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+      deployments: write
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 22
+
+      - uses: extractions/setup-just@v3
+
+      - name: Build and check
+        env:
+          TURNSTILE_SITE_KEY: ${{ needs.infra.outputs.turnstile_site_key }}
+        run: just check
+
+      # main goes to production, any other branch to its own preview URL.
+      - name: Deploy pages
+        uses: cloudflare/wrangler-action@v4
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: pages deploy ./dist --project-name=vachan-live --branch=${{ github.ref_name }} --commit-hash=${{ github.sha }}

@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Vachan · reads the web aloud</title>
+  <meta name="description" content="Vachan reads any web page aloud in a natural voice, on your own computer. Open source, and 100% local if you want. Coming soon.">
+  <link rel="icon" href="/favicon.png" type="image/png">
+  <link rel="canonical" href="https://vachan.live/">
+  <meta property="og:title" content="Vachan · reads the web aloud">
+  <meta property="og:description" content="Reads the page aloud, on your machine. Open source, and 100% local if you want.">
+  <meta property="og:image" content="https://vachan.live/poster.jpg">
+  <meta property="og:url" content="https://vachan.live/">
+  <meta name="twitter:card" content="summary_large_image">
+  <style>
+    :root {
+      --ink: #1d1d1f; --muted: #5c5c63; --accent: #c2410c; --accent-soft: #fb923c; --ground: #f6f3ee; --card: #ffffff;
+      color-scheme: light dark;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root { --ink: #f3f1ec; --muted: #a7a5a0; --ground: #111113; --card: #1a1a1d; }
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; }
+    body {
+      font: 18px/1.5 -apple-system, "SF Pro Text", "Segoe UI", Roboto, "Noto Sans", sans-serif;
+      color: var(--ink); background: var(--ground);
+      padding: 0 20px;
+    }
+    main { max-width: 1040px; margin: 0 auto; padding: 56px 0 40px; }
+    header { display: flex; align-items: center; gap: 18px; margin-bottom: 28px; }
+    header img { width: 64px; height: 64px; border-radius: 16px; }
+    .names { line-height: 1.1; }
+    .mr { font-family: "Kohinoor Devanagari", "Devanagari MT", "Noto Sans Devanagari", sans-serif; font-size: 24px; color: var(--muted); }
+    h1 { font-size: 44px; letter-spacing: -0.02em; margin: 2px 0 0; font-weight: 700; }
+    .lede { font-size: 24px; line-height: 1.35; max-width: 640px; margin: 0 0 32px; }
+    .lede b { font-weight: 600; }
+    .video { border-radius: 16px; overflow: hidden; background: #000; box-shadow: 0 24px 60px rgba(0,0,0,.18); aspect-ratio: 16 / 9; }
+    video { display: block; width: 100%; height: 100%; }
+    section.join { margin: 44px 0 0; max-width: 560px; }
+    section.join h2 { font-size: 22px; margin: 0 0 6px; }
+    section.join p { margin: 0 0 16px; color: var(--muted); }
+    form { display: flex; flex-wrap: wrap; gap: 10px; }
+    input[type=email] {
+      flex: 1 1 260px; font: inherit; padding: 12px 14px; border: 1px solid #c9c7c2; border-radius: 10px; background: var(--card); color: var(--ink);
+    }
+    input[type=email]:focus { outline: 2px solid var(--accent-soft); outline-offset: 1px; border-color: var(--accent); }
+    button {
+      font: inherit; font-weight: 600; padding: 12px 20px; border: 0; border-radius: 10px; background: var(--accent); color: #fff; cursor: pointer;
+    }
+    button:hover { background: #a3360a; }
+    button[disabled] { opacity: .6; cursor: default; }
+    .cf-turnstile { flex-basis: 100%; }
+    .hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+    .status { flex-basis: 100%; min-height: 1.5em; margin: 0; }
+    .status.ok { color: #1b7f3b; }
+    .status.err { color: #b42318; }
+    footer { margin-top: 56px; padding-top: 20px; border-top: 1px solid rgba(128,128,128,.25); color: var(--muted); font-size: 15px; display: flex; flex-wrap: wrap; gap: 8px 24px; }
+    footer a { color: inherit; }
+    @media (max-width: 600px) {
+      main { padding-top: 32px; }
+      h1 { font-size: 36px; }
+      .lede { font-size: 20px; }
+      header img { width: 52px; height: 52px; }
+    }
+  </style>
+</head>
+<body>
+<main>
+  <header>
+    <img src="/logo.svg" alt="" width="64" height="64">
+    <div class="names">
+      <div class="mr" lang="mr">वाचन</div>
+      <h1>Vachan</h1>
+    </div>
+  </header>
+
+  <p class="lede">Reads the page aloud, on your machine. <b>Open source, and 100% local if you want.</b></p>
+
+  <div class="video">
+    <video controls playsinline preload="metadata" poster="/poster.jpg">
+      <source src="/demo.mp4" type="video/mp4">
+    </video>
+  </div>
+
+  <section class="join" id="join">
+    <h2>Coming soon</h2>
+    <p>One email when it ships. Nothing else, and nothing shared.</p>
+    <form id="join-form" method="post" action="/subscribe" novalidate>
+      <label class="hp" aria-hidden="true">Leave this empty <input type="text" name="website" tabindex="-1" autocomplete="off"></label>
+      <label class="hp" for="email">Email</label>
+      <input id="email" name="email" type="email" autocomplete="email" placeholder="you@example.com" maxlength="254" required>
+      <button type="submit" id="join-btn">Email me when it ships</button>
+      <div class="cf-turnstile" data-sitekey="__TURNSTILE_SITE_KEY__" data-size="flexible" data-theme="auto"></div>
+      <p class="status" id="join-status" role="status" aria-live="polite"></p>
+    </form>
+  </section>
+
+  <footer>
+    <span>By <a href="https://icf-c.com">ICF Computers</a></span>
+    <span><a href="mailto:vachan@icf-c.com">vachan@icf-c.com</a></span>
+  </footer>
+</main>
+
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+<script>
+  // Posts the form as JSON to the Pages Function at /subscribe. Without
+  // JavaScript the form still posts; the function answers with plain text.
+  const form = document.getElementById('join-form');
+  const status = document.getElementById('join-status');
+  const btn = document.getElementById('join-btn');
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    status.className = 'status';
+    status.textContent = '';
+    const data = Object.fromEntries(new FormData(form).entries());
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(data.email || '')) {
+      status.className = 'status err';
+      status.textContent = 'That does not look like an email address.';
+      return;
+    }
+    btn.disabled = true;
+    try {
+      const r = await fetch('/subscribe', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) });
+      const out = await r.json().catch(() => ({}));
+      if (r.ok && out.ok) {
+        status.className = 'status ok';
+        status.textContent = out.already ? 'You are already on the list.' : 'Noted. One email when it ships.';
+        form.reset();
+      } else {
+        status.className = 'status err';
+        status.textContent = out.error || 'Could not save that. Write to vachan@icf-c.com and it will reach me.';
+        if (window.turnstile) window.turnstile.reset();
+      }
+    } catch {
+      status.className = 'status err';
+      status.textContent = 'Could not reach the server. Write to vachan@icf-c.com and it will reach me.';
+    } finally {
+      btn.disabled = false;
+    }
+  });
+</script>
+</body>
+</html>
