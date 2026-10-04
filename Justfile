@@ -58,3 +58,7 @@ plan:
 # Deploy dist/ by hand to a preview branch, for when the workflow is not an option
 deploy branch="manual":
     npx --yes wrangler pages deploy ./dist --project-name=vachan-live --branch={{branch}}
+
+# Copy the four secrets from infra/.env.local to GitHub Actions: just secrets [--dry-run]
+secrets *args:
+    "{{scripts}}/set-secrets.sh" {{args}}

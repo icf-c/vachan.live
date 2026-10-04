@@ -40,6 +40,9 @@ GitHub secrets the workflow needs, and nothing else:
 | `CLOUDFLARE_ACCOUNT_ID` | the account |
 | `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY` | the Terraform state bucket `tfstate-yogeshlonkar`, key `vachan.live/infra.tfstate` |
 
+Put them in `infra/.env.local` (gitignored, one `KEY=value` per line) and
+run `just secrets`; it refuses an empty value or a lone hyphen.
+
 The zone `vachan.live` must already be on the account; `infra/dns.tf` finds
 it by name. No zone id secret, no Turnstile secret, no SMTP: the only
 person-held values are the four above.
