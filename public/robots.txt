@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+Disallow: /subscribe
+Sitemap: https://vachan.live/sitemap.xml

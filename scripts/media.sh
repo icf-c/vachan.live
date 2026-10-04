@@ -26,6 +26,9 @@ for f in "${files[@]}"; do
   case "$name" in
     *.mp4) type="video/mp4" ;; *.jpg|*.jpeg) type="image/jpeg" ;; *.png) type="image/png" ;; *.webm) type="video/webm" ;; *.gif) type="image/gif" ;; *) type="application/octet-stream" ;;
   esac
+  # Delete first: a put over an existing key keeps the old object's cached
+  # copies alive at the edge longer than a fresh key does.
+  npx --yes wrangler r2 object delete "$bucket/$name" --remote >/dev/null 2>&1 || true
   npx --yes wrangler r2 object put "$bucket/$name" --file "$f" --content-type "$type" --remote >/dev/null
   printf '  %-14s %7s  https://media.vachan.live/%s\n' "$name" "$(du -h "$f" | cut -f1)" "$name"
 done

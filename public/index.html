@@ -3,15 +3,45 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Vachan · reads the web aloud</title>
-  <meta name="description" content="Vachan reads any web page aloud in a natural voice, on your own computer. Open source, and 100% local if you want. Coming soon.">
+  <title>Vachan: read any web page aloud. Text-to-speech extension for Chrome</title>
+  <meta name="description" content="Vachan reads web pages out loud in a natural voice and highlights each word as it is spoken. A free, open-source text-to-speech reader extension for Chrome that runs on your own machine.">
+  <meta name="keywords" content="text to speech, TTS, read aloud, read out loud, Chrome extension, page reader, voice reader, web reader, screen reader for web pages, natural voice, read along, open source, local, offline">
+  <meta name="robots" content="index, follow, max-image-preview:large">
+  <meta name="theme-color" content="#c2410c">
   <link rel="icon" href="/favicon.png" type="image/png">
+  <link rel="apple-touch-icon" href="/icon-128.png">
   <link rel="canonical" href="https://vachan.live/">
-  <meta property="og:title" content="Vachan · reads the web aloud">
-  <meta property="og:description" content="Reads the page aloud, on your machine. Open source, and 100% local if you want.">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Vachan">
+  <meta property="og:title" content="Vachan: read any web page aloud">
+  <meta property="og:description" content="A text-to-speech extension for Chrome that reads the page out loud, highlights every word as it is spoken, and runs on your own machine. Open source.">
   <meta property="og:image" content="https://media.vachan.live/poster.jpg">
+  <meta property="og:image:width" content="1920">
+  <meta property="og:image:height" content="1080">
+  <meta property="og:video" content="https://media.vachan.live/demo.mp4">
+  <meta property="og:video:type" content="video/mp4">
   <meta property="og:url" content="https://vachan.live/">
   <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Vachan: read any web page aloud">
+  <meta name="twitter:description" content="Text-to-speech for Chrome that reads the page out loud and highlights each word as it is spoken. Open source, runs on your machine.">
+  <meta name="twitter:image" content="https://media.vachan.live/poster.jpg">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "Vachan",
+    "alternateName": "वाचन",
+    "url": "https://vachan.live/",
+    "applicationCategory": "BrowserApplication",
+    "applicationSubCategory": "Text-to-speech reader",
+    "operatingSystem": "Chrome",
+    "description": "Vachan reads web pages out loud in a natural voice and highlights each word as it is spoken. A free, open-source text-to-speech reader extension for Chrome that runs on your own machine.",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+    "isAccessibleForFree": true,
+    "author": { "@type": "Organization", "name": "ICF Computers", "url": "https://icf-c.com" },
+    "video": { "@type": "VideoObject", "name": "Vachan demo", "description": "Vachan reading a Wikipedia article aloud with the spoken word highlighted, then the mini player, themes, voices and reading lists.", "thumbnailUrl": "https://media.vachan.live/poster.jpg", "contentUrl": "https://media.vachan.live/demo.mp4", "uploadDate": "2026-10-04", "duration": "PT1M23S" }
+  }
+  </script>
   <style>
     /* The demo's own look: the warm radial ground the hero cards and the
        store composites sit on, the orange accent of the icon and the pill,
@@ -42,6 +72,12 @@
     .lede b { font-weight: 600; color: var(--accent); }
     .video { border-radius: 18px; overflow: hidden; background: #000; box-shadow: 0 30px 80px rgba(20,20,30,.22), 0 2px 6px rgba(0,0,0,.08); aspect-ratio: 16 / 9; }
     video { display: block; width: 100%; height: 100%; }
+    section.what { margin: 48px 0 0; max-width: 720px; }
+    section.what h2 { font-size: 26px; letter-spacing: -0.015em; margin: 0 0 10px; }
+    section.what p { margin: 0 0 14px; color: var(--muted); }
+    section.what ul { margin: 0; padding-left: 20px; color: var(--muted); }
+    section.what li { margin: 6px 0; }
+    section.what li b { color: var(--ink); font-weight: 600; }
     section.join {
       margin: 56px 0 0; padding: 56px 20px 48px; background: var(--dark); color: #f5f5f7;
     }
@@ -90,7 +126,7 @@
     </div>
   </header>
 
-  <p class="lede">Reads the page aloud, on your machine. <b>Open source, and 100% local if you want.</b></p>
+  <p class="lede">Reads the page aloud in your browser.<br><b>Open source. If you want, 100% local: nothing leaves your machine.</b></p>
 
   <div class="video">
     <video controls playsinline preload="metadata" poster="https://media.vachan.live/poster.jpg">
@@ -98,6 +134,15 @@
     </video>
   </div>
 
+  <section class="what" id="what">
+    <h2>A text-to-speech reader for Chrome</h2>
+    <p>Select text or read the whole page out loud, and as the voice reads the sentence is marked and the spoken word is lit the moment the voice reaches it so your eyes and your ears stay on the same line even when you look away and come back. 54 natural voices across 9 languages, from a neural model running on your own computer rather than on a server.</p>
+    <ul>
+      <li><b>Read aloud, read along.</b> Sentence and word highlighting, a mini player on the page, a side panel with the queue.</li>
+      <li><b>Pick up anywhere.</b> Pause, say that again, change speed, click a word to jump there, save pages to a reading list for later.</li>
+      <li><b>Your machine, your data.</b> The voice is synthesised locally. No account, no upload, no tracking. The code is open source.</li>
+    </ul>
+  </section>
 </main>
 <section class="join" id="join">
     <div class="inner">
