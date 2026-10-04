@@ -12,7 +12,7 @@ Load the `voice` skill (professional) and `stop-slop` before touching any
 prose here, the page copy included. `just voice` runs the checker on the
 page's text.
 
-`just check` is the gate before a push. The workflow deploys; see README.md
+`just check` is the gate before a push. The workflow deploys; see infra/README.md
 for the secrets it needs and the two-job shape (infra, then deploy).
 
 The video is the long demo cut from `vachan/extension/demo/out/demo.mp4`.
