@@ -16,11 +16,12 @@ locals {
     always_use_https         = "on"
     automatic_https_rewrites = "on"
     min_tls_version          = "1.2"
-    tls_1_3                  = "on"
+    # "zrt" is TLS 1.3 with 0-RTT, which is what the API reports once 0rtt is on.
+    tls_1_3                  = "zrt"
     opportunistic_encryption = "off"
     # Protocols. 0-RTT is fine: the only POST is /subscribe, which the
     # Turnstile token makes single-use, so a replayed early request fails.
-    http2             = "on"
+    # http2 is absent: the API answers 1015 "Not allowed to edit setting for http2"; it is on, read-only.
     http3             = "on"
     "0rtt"            = "on"
     h2_prioritization = "on"
@@ -182,4 +183,9 @@ resource "cloudflare_ruleset" "ratelimit" {
 resource "cloudflare_zone_dnssec" "site" {
   zone_id = local.zone_id
   status  = "active"
+  # Cloudflare answers "pending" until the DS record is at the registrar,
+  # which would re-send this on every run.
+  lifecycle {
+    ignore_changes = [status]
+  }
 }
