@@ -1,9 +1,12 @@
 # CLAUDE.md - vachan.live
 
-One page: the product's name, one sentence, the demo video, an email field.
-Nothing on it may claim a shipped feature that has not shipped. The cloud
-API is named as what is coming (Yogesh's decision, 2026-10-04), not as a
-thing you can use today.
+One page: the product's name, a hero line, the demo video, the email
+field, the three ways to get a voice (browser, local server, cloud) and the
+privacy line. Nothing on it may claim a shipped feature that has not
+shipped; the cloud path is described as what is coming (Yogesh's decision,
+2026-10-04). Every zone switch in `infra/zone.tf` follows one rule: nothing
+that puts a script, a cookie or a report into the visitor's browser, and
+`just privacy` is the proof.
 
 Load the `voice` skill (professional) and `stop-slop` before touching any
 prose here, the page copy included. `just voice` runs the checker on the
