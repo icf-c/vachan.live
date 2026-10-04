@@ -61,6 +61,8 @@
     }
     button:hover { background: #a3360a; }
     button[disabled] { opacity: .6; cursor: default; }
+    .beta { flex-basis: 100%; display: flex; align-items: center; gap: 10px; color: #d6d4cf; font-size: 16px; cursor: pointer; margin: 2px 0 4px; }
+    .beta input { width: 18px; height: 18px; accent-color: var(--accent); margin: 0; }
     .cf-turnstile { flex-basis: 100%; }
     .hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
     .status { flex-basis: 100%; min-height: 1.5em; margin: 0; color: #b8b6b1; }
@@ -107,6 +109,7 @@
         <label class="hp" for="email">Email</label>
         <input id="email" name="email" type="email" autocomplete="email" placeholder="you@example.com" maxlength="254" required>
         <button type="submit" id="join-btn">Email me when it ships</button>
+        <label class="beta"><input type="checkbox" name="beta" value="yes"> I'd test a beta before it ships</label>
         <div class="cf-turnstile" data-sitekey="__TURNSTILE_SITE_KEY__" data-size="flexible" data-theme="dark"></div>
         <p class="status" id="join-status" role="status" aria-live="polite"></p>
       </form>
@@ -143,7 +146,7 @@
       const out = await r.json().catch(() => ({}));
       if (r.ok && out.ok) {
         status.className = 'status ok';
-        status.textContent = out.already ? 'You are already on the list.' : 'Noted. One email when it ships.';
+        status.textContent = out.already ? 'You are already on the list.' : (data.beta ? 'Noted, and you are on the beta list.' : 'Noted. One email when it ships.');
         form.reset();
       } else {
         status.className = 'status err';

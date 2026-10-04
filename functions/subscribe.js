@@ -6,8 +6,9 @@
  *   SUBSCRIBERS        KV namespace, key = the lower-cased address
  *   TURNSTILE_SECRET   secret half of the Turnstile widget
  *
- * What is stored: the address, the time, and the Accept-Language header so
- * the shipping mail can be in the right language. No IP, no user agent.
+ * What is stored: the address, the time, whether they ticked the beta box,
+ * and the Accept-Language header so the shipping mail can be in the right
+ * language. No IP, no user agent.
  */
 
 const TEST_SECRET = '1x0000000000000000000000000000000AA'; // Cloudflare's always-passes key, for `just serve`
@@ -60,12 +61,21 @@ export async function onRequestPost({ request, env }) {
     return json({ ok: false, error: 'The security check did not pass. Try once more.' }, 403);
   }
 
+  const beta = data.beta === 'yes' || data.beta === true || data.beta === 'on';
   const key = `email:${email}`;
-  const already = (await env.SUBSCRIBERS.get(key)) !== null;
-  if (!already) {
+  const existing = await env.SUBSCRIBERS.get(key, 'json');
+  const already = existing !== null;
+  // A second submit only ever adds the beta flag; it never clears it and
+  // never moves the original time.
+  if (!already || (beta && !existing.beta)) {
     await env.SUBSCRIBERS.put(
       key,
-      JSON.stringify({ email, at: new Date().toISOString(), lang: (request.headers.get('Accept-Language') || '').split(',')[0].slice(0, 16) }),
+      JSON.stringify({
+        email,
+        at: existing?.at ?? new Date().toISOString(),
+        beta: Boolean(existing?.beta) || beta,
+        lang: existing?.lang ?? (request.headers.get('Accept-Language') || '').split(',')[0].slice(0, 16),
+      }),
     );
   }
   return json({ ok: true, already });

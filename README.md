@@ -53,7 +53,8 @@ person-held values are the four above.
 
 ## What the form stores
 
-The address, lower-cased, the time, and the first `Accept-Language` value,
+The address, lower-cased, the time, whether the beta box was ticked, and the
+first `Accept-Language` value,
 in the KV namespace `vachan-live-subscribers`. No IP, no user agent, no
 cookie. The page says "One email when it ships. Nothing else, and nothing
 shared." and the code holds it to that.
