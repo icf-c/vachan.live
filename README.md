@@ -38,10 +38,14 @@ GitHub secrets the workflow needs, and nothing else:
 | --- | --- |
 | `CLOUDFLARE_API_TOKEN` | Pages edit, Workers KV edit, Turnstile edit, DNS edit and Zone read on vachan.live |
 | `CLOUDFLARE_ACCOUNT_ID` | the account |
-| `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY` | the Terraform state bucket `tfstate-yogeshlonkar`, key `vachan.live/infra.tfstate` |
+| `R2_ACCESS_KEY_ID`, `R2_SECRET_ACCESS_KEY` | an R2 API token (Object Read & Write on the bucket `tfstate-vachan`), for the Terraform state |
 
 Put them in `infra/.env.local` (gitignored, one `KEY=value` per line) and
 run `just secrets`; it refuses an empty value or a lone hyphen.
+
+The state bucket is created once, by hand or with `just state-bucket`
+(wrangler, needs the API token in the environment). The account is the one
+that holds vachan.live; nothing here touches the lonkar.org account.
 
 The zone `vachan.live` must already be on the account; `infra/dns.tf` finds
 it by name. No zone id secret, no Turnstile secret, no SMTP: the only

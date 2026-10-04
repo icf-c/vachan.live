@@ -51,10 +51,6 @@ voice:
 subscribers:
     "{{scripts}}/subscribers.sh"
 
-# Terraform plan from this machine, read-only: just plan
-plan:
-    cd infra && terraform init -input=false -lockfile=readonly -backend-config=backend.config && terraform plan -input=false
-
 # Deploy dist/ by hand to a preview branch, for when the workflow is not an option
 deploy branch="manual":
     npx --yes wrangler pages deploy ./dist --project-name=vachan-live --branch={{branch}}
@@ -62,3 +58,17 @@ deploy branch="manual":
 # Copy the four secrets from infra/.env.local to GitHub Actions: just secrets [--dry-run]
 secrets *args:
     "{{scripts}}/set-secrets.sh" {{args}}
+
+# Create the R2 bucket the Terraform state lives in, once. Needs
+# CLOUDFLARE_API_TOKEN and CLOUDFLARE_ACCOUNT_ID in the environment
+state-bucket:
+    npx --yes wrangler r2 bucket create tfstate-vachan
+
+# Terraform plan from this machine, with the values from infra/.env.local
+plan-local:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    set -a; source infra/.env.local; set +a
+    export TF_VAR_cloudflare_api_token="$CLOUDFLARE_API_TOKEN" TF_VAR_cloudflare_account_id="$CLOUDFLARE_ACCOUNT_ID"
+    export AWS_ENDPOINT_URL_S3="https://$CLOUDFLARE_ACCOUNT_ID.r2.cloudflarestorage.com" AWS_ACCESS_KEY_ID="$R2_ACCESS_KEY_ID" AWS_SECRET_ACCESS_KEY="$R2_SECRET_ACCESS_KEY" AWS_REGION=auto
+    cd infra && terraform init -input=false -lockfile=readonly -backend-config=backend.config && terraform plan -input=false

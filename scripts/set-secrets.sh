@@ -25,7 +25,7 @@ for arg in "$@"; do
 done
 [[ -f "$file" ]] || { echo "no env file at $file" >&2; exit 1; }
 
-keys=(CLOUDFLARE_API_TOKEN CLOUDFLARE_ACCOUNT_ID AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY)
+keys=(CLOUDFLARE_API_TOKEN CLOUDFLARE_ACCOUNT_ID R2_ACCESS_KEY_ID R2_SECRET_ACCESS_KEY)
 
 read_value() {
   local key="$1" line value
