@@ -25,7 +25,12 @@ check: build
     #!/usr/bin/env bash
     set -euo pipefail
     if rg --hidden -q '@(Yogesh|claude)\(' dist; then echo "a marker reached dist/"; rg --hidden -n '@(Yogesh|claude)\(' dist; exit 1; fi
-    for f in dist/demo.mp4 dist/poster.jpg dist/logo.svg dist/favicon.png; do [[ -s "$f" ]] || { echo "missing $f"; exit 1; }; done
+    for f in dist/logo.svg dist/favicon.png; do [[ -s "$f" ]] || { echo "missing $f"; exit 1; }; done
+    # The video and poster live on R2; the page must not point at a 404.
+    for u in https://media.vachan.live/demo.mp4 https://media.vachan.live/poster.jpg; do
+      code=$(curl -s -o /dev/null -w '%{http_code}' --max-time 20 -I "$u" || echo 000)
+      [[ "$code" == 200 ]] || echo "  warning: $u answers $code (run just media once the bucket exists)"
+    done
     node --check functions/subscribe.js
     just voice
     echo "all checks passed"
@@ -46,6 +51,13 @@ voice:
     open(sys.argv[1], 'w').write(re.sub(r'[ \t]+', ' ', t))
     EOF
     VOICE_DEFAULT_PROFILE=professional "$checker" --profile professional "$tmp"
+
+# Upload media/ (the demo cut and its poster) to the R2 bucket the page links to
+media *files:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    set -a; source infra/.env.local; set +a
+    "{{scripts}}/media.sh" {{files}}
 
 # Every address the form has taken, as CSV on stdout
 subscribers:

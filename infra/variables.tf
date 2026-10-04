@@ -15,3 +15,15 @@ variable "domain" {
   type        = string
   default     = "vachan.live"
 }
+
+variable "media_bucket_name" {
+  description = "R2 bucket for the files the page links to and git must not carry"
+  type        = string
+  default     = "media-vachan-live"
+}
+
+variable "media_domain" {
+  description = "The hostname the media bucket is served on"
+  type        = string
+  default     = "media.vachan.live"
+}

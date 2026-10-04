@@ -11,9 +11,9 @@ page's text.
 `just check` is the gate before a push. The workflow deploys; see README.md
 for the secrets it needs and the two-job shape (infra, then deploy).
 
-The video is the long demo cut from `vachan/extension/demo/out/demo.mp4`
-(not tracked there; this copy is the published one). Replace it by copying
-the new file over `public/demo.mp4` and `public/poster.jpg`.
+The video is the long demo cut from `vachan/extension/demo/out/demo.mp4`.
+It is never committed: copy it and `poster.jpg` into `media/` and run
+`just media`, which puts them on the R2 bucket behind media.vachan.live.
 
 Open questions carry `@Yogesh(subject): …` markers in HTML comments; `just
 check` fails if one reaches `dist/`.
