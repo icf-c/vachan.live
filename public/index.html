@@ -71,6 +71,7 @@
     .lede { font-size: 26px; line-height: 1.3; letter-spacing: -0.01em; max-width: 680px; margin: 0 0 36px; }
     .lede b { font-weight: 600; color: var(--accent); }
     .video { border-radius: 18px; overflow: hidden; background: #000; box-shadow: 0 30px 80px rgba(20,20,30,.22), 0 2px 6px rgba(0,0,0,.08); aspect-ratio: 16 / 9; }
+    .accented { color: var(--accent); } 
     video { display: block; width: 100%; height: 100%; }
     section.what { margin: 48px 0 0; max-width: 720px; }
     section.what h2 { font-size: 26px; letter-spacing: -0.015em; margin: 0 0 10px; }
@@ -136,7 +137,7 @@
     </div>
   </header>
 
-  <p class="lede">Reads any web page aloud. <b>A free, open-source Chrome extension.</b> No install beyond the extension. Nothing is uploaded.</p>
+  <p class="lede">Your browser reads the page aloud. The text stays on your machine unless you choose the <b>cloud voice</b>.</p>
 
   <div class="video">
     <video controls playsinline preload="metadata" poster="https://media.vachan.live/poster.jpg?v=__MEDIA_V__">
@@ -175,17 +176,17 @@
       </div>
       <div class="card">
         <h3>Your own machine, for people who want a better voice</h3>
-        <p>Install the open-source local server from the repo and point Vachan at it. That server runs Kokoro, so you get its 54 voices in 9 languages, on your machine. The page text goes to that server and nowhere else. No account.</p>
+        <p>Install the open-source local server from the repo and point Vachan at it. That server runs Kokoro, so you get its <b class="accented">54 voices in 9 languages</b>, on your machine. The page text goes to that server and nowhere else. No account.</p>
       </div>
       <div class="card">
         <h3>Vachan cloud, the paid path</h3>
-        <p>If you do not want to run Kokoro yourself, Vachan can synthesise on vachan.live. You sign in, and the extension sends an auth token and the text to be read. Audio comes back. You pay per minute. No account is required for the other two paths.</p>
+        <p>If you do not want to run Kokoro yourself, Vachan can synthesise on vachan.live. You sign in, and the extension sends an auth token and the text to be read. Audio comes back. You <b class="accented">pay per minute</b>. No account is required for the other two paths.</p>
       </div>
     </div>
   </section>
 
   <section class="privacy" id="privacy">
-    <p>The extension has no analytics and no cookies. The only third-party script is the bot check on this form. Browser voices and the local server never send text off the machine. The cloud path sends the text you chose to read, and the auth token, to vachan.live to synthesise it. That text is not kept for ads and is not sold.</p>
+    <p>The extension has <b class="accented">no analytics</b> and <b class="accented">no cookies</b>. Browser voices and the <b class="accented">local server never send</b> text off your machine. The cloud voice sends the text you chose to read, and an auth token, to vachan.live to synthesise it. That text is used to make the audio. It is not sold, not used for ads, and not used to train a model. The only third-party script on this page is the bot check on the form. The form stores the email you submit and nothing else. The site source is on <a href="https://github.com/icf-c/vachan.live">GitHub</a></p>
   </section>
 </main>
 <div class="wrap-dark">
