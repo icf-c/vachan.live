@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Vachan: read any web page aloud. Text-to-speech extension for Chrome</title>
-  <meta name="description" content="Vachan reads web pages out loud in a natural voice and highlights each word as it is spoken. A free, open-source text-to-speech reader extension for Chrome that runs on your own machine.">
+  <meta name="description" content="Vachan is an open-source Chrome extension that reads a web page aloud and highlights each word as it is spoken. It uses your browser's voices by default. A local Kokoro server, or paid synthesis on vachan.live, are optional.">
   <meta name="keywords" content="text to speech, TTS, read aloud, read out loud, Chrome extension, page reader, voice reader, web reader, screen reader for web pages, natural voice, read along, open source, local, offline">
   <meta name="robots" content="index, follow, max-image-preview:large">
   <meta name="theme-color" content="#c2410c">
@@ -14,7 +14,7 @@
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Vachan">
   <meta property="og:title" content="Vachan: read any web page aloud">
-  <meta property="og:description" content="A text-to-speech extension for Chrome that reads the page out loud, highlights every word as it is spoken, and runs on your own machine. Open source.">
+  <meta property="og:description" content="Vachan is an open-source Chrome extension that reads a web page aloud and highlights each word as it is spoken. It uses your browser's voices by default. A local Kokoro server, or paid synthesis on vachan.live, are optional.">
   <meta property="og:image" content="https://media.vachan.live/poster.jpg?v=__MEDIA_V__">
   <meta property="og:image:width" content="1920">
   <meta property="og:image:height" content="1080">
@@ -23,7 +23,7 @@
   <meta property="og:url" content="https://vachan.live/">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Vachan: read any web page aloud">
-  <meta name="twitter:description" content="Text-to-speech for Chrome that reads the page out loud and highlights each word as it is spoken. Open source, runs on your machine.">
+  <meta name="twitter:description" content="Vachan is an open-source Chrome extension that reads a web page aloud and highlights each word as it is spoken. It uses your browser's voices by default. A local Kokoro server, or paid synthesis on vachan.live, are optional.">
   <meta name="twitter:image" content="https://media.vachan.live/poster.jpg?v=__MEDIA_V__">
   <script type="application/ld+json">
   {
@@ -35,7 +35,7 @@
     "applicationCategory": "BrowserApplication",
     "applicationSubCategory": "Text-to-speech reader",
     "operatingSystem": "Chrome",
-    "description": "Vachan reads web pages out loud in a natural voice and highlights each word as it is spoken. A free, open-source text-to-speech reader extension for Chrome that runs on your own machine.",
+    "description": "Vachan is an open-source Chrome extension that reads a web page aloud and highlights each word as it is spoken. It uses your browser's voices by default. A local Kokoro server, or paid synthesis on vachan.live, are optional.",
     "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
     "isAccessibleForFree": true,
     "author": { "@type": "Organization", "name": "ICF Computers", "url": "https://icf-c.com" },
@@ -78,6 +78,16 @@
     section.what ul { margin: 0; padding-left: 20px; color: var(--muted); }
     section.what li { margin: 6px 0; }
     section.what li b { color: var(--ink); font-weight: 600; }
+    main.below { padding-top: 8px; }
+    section.ways { margin: 48px 0 0; }
+    section.ways h2 { font-size: 26px; letter-spacing: -0.015em; margin: 0 0 18px; }
+    .cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+    .card { background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 20px 22px; }
+    .card h3 { font-size: 17px; margin: 0 0 8px; letter-spacing: -0.01em; }
+    .card p { margin: 0; color: var(--muted); font-size: 16px; line-height: 1.5; }
+    section.privacy { margin: 32px 0 0; max-width: 720px; color: var(--muted); }
+    section.privacy p { margin: 0; }
+    @media (max-width: 760px) { .cards { grid-template-columns: 1fr; } }
     section.join {
       margin: 56px 0 0; padding: 56px 20px 48px; background: var(--dark); color: #f5f5f7;
     }
@@ -106,7 +116,6 @@
     .status.err { color: #ff9c8a; }
     footer { max-width: 1040px; margin: 0 auto; padding: 26px 20px 36px; color: #8a8883; font-size: 15px; display: flex; flex-wrap: wrap; gap: 8px 24px; }
     footer a { color: inherit; }
-    footer .gh { display: inline-flex; align-items: center; gap: 6px; }
     .wrap-dark { background: var(--dark); }
     @media (max-width: 600px) {
       main { padding-top: 36px; }
@@ -127,24 +136,13 @@
     </div>
   </header>
 
-  <p class="lede">Reads the page aloud in your browser.<br><b>Open source.<br>Can be 100% local: nothing leaves your machine.</b></p>
+  <p class="lede">Reads any web page aloud. <b>A free, open-source Chrome extension.</b> No install beyond the extension. Nothing is uploaded.</p>
 
   <div class="video">
     <video controls playsinline preload="metadata" poster="https://media.vachan.live/poster.jpg?v=__MEDIA_V__">
       <source src="https://media.vachan.live/demo.mp4?v=__MEDIA_V__" type="video/mp4">
     </video>
   </div>
-
-  <section class="what" id="what">
-    <h2>A text-to-speech reader for Chrome</h2>
-    <p>Select text or read the whole page out loud, and as the voice reads the sentence is marked and the spoken word is lit the moment the voice reaches it so your eyes and your ears stay on the same line even when you look away and come back. 54 natural voices across 9 languages, from a neural model running on a server or your own computer.</p>
-    <ul>
-      <li><b>Read aloud, read along.</b> Sentence and word highlighting, a mini player on the page, a side panel with the queue.</li>
-      <li><b>Pick up anywhere.</b> Pause, say that again, change speed, click a word to jump there, save pages to a reading list for later.</li>
-      <li><b>Your machine, your data.</b> The voice is synthesised locally. No account, no upload, no tracking. No cookies, no analytics and no script from anyone, only the bot check on the form. Open source code from launch.</li>
-      <li><b>An open core cloud API.</b> If you want vachan.live to do synthesis for you. One account, cheapest price per minute read and 100% privacy control, no tracking, so no one can sell your data.</li>
-    </ul>
-  </section>
 </main>
 <section class="join" id="join">
     <div class="inner">
@@ -162,12 +160,38 @@
       </form>
     </div>
 </section>
+<main class="below">
+  <section class="what" id="what">
+    <h2>A text-to-speech reader for Chrome</h2>
+    <p>Select text, or read the page. The sentence is marked and the spoken word is lit as the voice reaches it. Pause, go back a sentence, change speed, click a word to jump there, and save a page to a reading list. One player for every tab.</p>
+  </section>
+
+  <section class="ways" id="voices">
+    <h2>Three ways to get the voice.</h2>
+    <div class="cards">
+      <div class="card">
+        <h3>Browser, the default</h3>
+        <p>The extension uses the voices already in Chrome. No server, no account, no audio uploaded. Works for every language your browser can speak. Voice quality is whatever your system has.</p>
+      </div>
+      <div class="card">
+        <h3>Your own machine, for people who want a better voice</h3>
+        <p>Install the open-source local server from the repo and point Vachan at it. That server runs Kokoro, so you get its 54 voices in 9 languages, on your machine. The page text goes to that server and nowhere else. No account.</p>
+      </div>
+      <div class="card">
+        <h3>Vachan cloud, the paid path</h3>
+        <p>If you do not want to run Kokoro yourself, Vachan can synthesise on vachan.live. You sign in, and the extension sends an auth token and the text to be read. Audio comes back. You pay per minute. No account is required for the other two paths.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="privacy" id="privacy">
+    <p>The extension has no analytics and no cookies. The only third-party script is the bot check on this form. Browser voices and the local server never send text off the machine. The cloud path sends the text you chose to read, and the auth token, to vachan.live to synthesise it. That text is not kept for ads and is not sold.</p>
+  </section>
+</main>
 <div class="wrap-dark">
   <footer>
-    <span>Vachan. Open sourced soon</span>
-    <span><a class="gh" href="https://github.com/icf-c/vachan.live"><svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg> vachan.live on GitHub</a></span>
+    <span>Open source from launch. By <a href="https://icf-c.com">ICF Computers</a>.</span>
     <span><a href="mailto:vachan@icf-c.com">vachan@icf-c.com</a></span>
-    <span>By <a href="https://icf-c.com">ICF Computers</a></span>
   </footer>
 </div>
 
