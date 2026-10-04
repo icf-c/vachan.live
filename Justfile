@@ -36,6 +36,11 @@ check: build
     echo "all checks passed"
 
 # The prose on the page against the professional profile, when the checker is here
+# Prove the privacy line against the live edge (or any URL): no script src,
+# nothing from /cdn-cgi/, no cookie, no NEL, a policy naming only our hosts
+privacy url="https://vachan.live/":
+    scripts/privacy-check.sh {{url}}
+
 voice:
     #!/usr/bin/env bash
     set -euo pipefail

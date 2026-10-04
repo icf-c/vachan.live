@@ -140,7 +140,7 @@
     <ul>
       <li><b>Read aloud, read along.</b> Sentence and word highlighting, a mini player on the page, a side panel with the queue.</li>
       <li><b>Pick up anywhere.</b> Pause, say that again, change speed, click a word to jump there, save pages to a reading list for later.</li>
-      <li><b>Your machine, your data.</b> The voice is synthesised locally. No account, no upload, no cookies, no tracking. Cloudflare counts page views and load times in aggregate. Open source code from launch.</li>
+      <li><b>Your machine, your data.</b> The voice is synthesised locally. No account, no upload, no tracking. No cookies, no analytics and no script from anyone, only the bot check on the form. Open source code from launch.</li>
       <li><b>An open core cloud API.</b> If you want vachan.live to do synthesis for you. One account, cheapest price per minute read and 100% privacy control, no tracking, so no one can sell your data.</li>
     </ul>
   </section>
@@ -169,13 +169,39 @@
   </footer>
 </div>
 
-<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 <script>
   // Posts the form as JSON to the Pages Function at /subscribe. Without
   // JavaScript the form still posts; the function answers with plain text.
   const form = document.getElementById('join-form');
   const status = document.getElementById('join-status');
   const btn = document.getElementById('join-btn');
+  // The bot check (Turnstile, a Cloudflare script) loads only once someone
+  // touches the form, so a visit that reads or watches runs no script from
+  // anyone. It renders itself into .cf-turnstile when it arrives.
+  let botCheck = null;
+  function loadBotCheck() {
+    if (botCheck) return botCheck;
+    botCheck = new Promise((resolve, reject) => {
+      const s = document.createElement('script');
+      s.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js';
+      s.async = true;
+      s.onload = resolve;
+      s.onerror = () => reject(new Error('bot check did not load'));
+      document.head.appendChild(s);
+    });
+    return botCheck;
+  }
+  for (const ev of ['focusin', 'pointerdown']) form.addEventListener(ev, loadBotCheck, { once: true });
+  // The widget's token, waiting up to ten seconds for a submit that beat it.
+  async function botToken() {
+    await loadBotCheck();
+    const field = () => form.querySelector('[name="cf-turnstile-response"]');
+    for (let i = 0; i < 100; i++) {
+      if (field()?.value) return field().value;
+      await new Promise((r) => setTimeout(r, 100));
+    }
+    return '';
+  }
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
     status.className = 'status';
@@ -187,6 +213,16 @@
       return;
     }
     btn.disabled = true;
+    status.textContent = 'Checking you are a person…';
+    try {
+      data['cf-turnstile-response'] = await botToken();
+    } catch {
+      status.className = 'status err';
+      status.textContent = 'The bot check did not load. Write to vachan@icf-c.com and it will reach me.';
+      btn.disabled = false;
+      return;
+    }
+    status.textContent = '';
     try {
       const r = await fetch('/subscribe', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) });
       const out = await r.json().catch(() => ({}));
