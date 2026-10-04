@@ -17,7 +17,7 @@ scripts/     build.sh (public/ -> dist/ with the site key), media.sh (upload to 
 just serve        # builds, then wrangler pages dev on :8788 with a local KV; the form works
 just check        # build, markers, assets, the Function parses, the prose checker
 just media        # upload media/* to the R2 bucket served at media.vachan.live
-just subscribers  # CSV of every address, through wrangler
+just subscribers  # CSV of every address, through the API
 ```
 
 ## How it deploys

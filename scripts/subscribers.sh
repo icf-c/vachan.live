@@ -1,28 +1,32 @@
 #!/usr/bin/env bash
-# List the addresses the form has collected, newest last, as CSV on stdout.
+# List the addresses the form has collected, as CSV on stdout.
 #
-#   scripts/subscribers.sh                  # email,at,beta,lang
+#   scripts/subscribers.sh              # email,at,beta,lang
 #   scripts/subscribers.sh > list.csv
 #
-# Reads the KV namespace through wrangler, which needs `wrangler login` once
-# on this machine. The namespace is found by its title, so no id is kept
-# here. KV lists keys in pages of 1000; this follows the cursor.
+# Reads the KV namespace through Cloudflare's API with CLOUDFLARE_API_TOKEN
+# and CLOUDFLARE_ACCOUNT_ID from the environment (the Justfile recipe
+# sources infra/.env.local). The first version went through wrangler, whose
+# `kv key list` printed a banner around the JSON and the parse died silently
+# behind a 2>/dev/null, so a store with one address listed as empty. The
+# API returns JSON and nothing else; pages of 1000 follow the cursor.
 set -euo pipefail
 cd "$(dirname "$0")/.."
+: "${CLOUDFLARE_API_TOKEN:?CLOUDFLARE_API_TOKEN is not set}"
+: "${CLOUDFLARE_ACCOUNT_ID:?CLOUDFLARE_ACCOUNT_ID is not set}"
+api="https://api.cloudflare.com/client/v4/accounts/$CLOUDFLARE_ACCOUNT_ID/storage/kv/namespaces"
+auth="Authorization: Bearer $CLOUDFLARE_API_TOKEN"
 
-ns_id=$(npx --yes wrangler kv namespace list 2>/dev/null | python3 -c 'import json,sys; print(next(n["id"] for n in json.load(sys.stdin) if n["title"]=="vachan-live-subscribers"))')
-[[ -n "$ns_id" ]] || { echo "no namespace titled vachan-live-subscribers; has infra been applied?" >&2; exit 1; }
+ns_id=$(curl -sf "$api" -H "$auth" | python3 -c 'import json,sys; print(next(n["id"] for n in json.load(sys.stdin)["result"] if n["title"]=="vachan-live-subscribers"))')
 
 echo "email,at,beta,lang"
 cursor=""
 while :; do
-  page=$(npx --yes wrangler kv key list --namespace-id "$ns_id" ${cursor:+--cursor "$cursor"} 2>/dev/null)
-  keys=$(printf '%s' "$page" | python3 -c 'import json,sys; [print(k["name"]) for k in json.load(sys.stdin)]')
-  for k in $keys; do
-    npx --yes wrangler kv key get --namespace-id "$ns_id" "$k" 2>/dev/null \
+  page=$(curl -sf "$api/$ns_id/keys?limit=1000${cursor:+&cursor=$cursor}" -H "$auth")
+  for key in $(printf '%s' "$page" | python3 -c 'import json,sys; [print(k["name"]) for k in json.load(sys.stdin)["result"]]'); do
+    curl -sf "$api/$ns_id/values/$key" -H "$auth" \
       | python3 -c 'import json,sys; d=json.load(sys.stdin); print(",".join([d.get("email",""), d.get("at",""), "yes" if d.get("beta") else "no", d.get("lang","")]))'
   done
-  # wrangler prints the next cursor on stderr only in some versions; one page
-  # covers the first thousand, which is enough until it is not.
-  break
+  cursor=$(printf '%s' "$page" | python3 -c 'import json,sys; print(json.load(sys.stdin).get("result_info",{}).get("cursor") or "")')
+  [[ -n "$cursor" ]] || break
 done

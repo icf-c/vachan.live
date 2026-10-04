@@ -61,6 +61,9 @@ media *files:
 
 # Every address the form has taken, as CSV on stdout
 subscribers:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    set -a; source infra/.env.local; set +a
     "{{scripts}}/subscribers.sh"
 
 # Deploy dist/ by hand to a preview branch, for when the workflow is not an option
